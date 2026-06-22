@@ -1,67 +1,64 @@
 'use client';
 
-import { useRef } from 'react';
-import { useGSAP } from '@gsap/react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import PostCard from './PostCard';
 import type { PostSummary } from '../lib/sample-posts';
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export default function EssayEnvelope({ posts }: { posts: PostSummary[] }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  useGSAP(
-    () => {
-      const stage = ref.current;
-      if (!stage) return;
+  useEffect(() => {
+    const stage = ref.current;
+    if (!stage) return;
 
-      const letters = gsap.utils.toArray<HTMLElement>('[data-letter]', stage);
-      const flap = stage.querySelector<HTMLElement>('[data-flap]');
-      const mouth = stage.querySelector<HTMLElement>('[data-mouth]');
-      const envelope = stage.querySelector<HTMLElement>('[data-envelope]');
+    const letters = Array.from(
+      stage.querySelectorAll<HTMLElement>('[data-letter]'),
+    );
+    const flap = stage.querySelector<HTMLElement>('[data-flap]');
+    const mouth = stage.querySelector<HTMLElement>('[data-mouth]');
+    const envelope = stage.querySelector<HTMLElement>('[data-envelope]');
 
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduce || !mouth) {
-        gsap.set(letters, { opacity: 1 });
-        return;
-      }
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !mouth) {
+      gsap.set(letters, { autoAlpha: 1 });
+      return;
+    }
 
-      // Tuck every card into the envelope mouth (converge to one point, fanned).
+    // Tuck every card into the envelope mouth (converge to one point, fanned).
+    const tuck = () => {
       const mr = mouth.getBoundingClientRect();
       const mcx = mr.left + mr.width / 2;
       const mcy = mr.top + mr.height / 2;
-
       letters.forEach((el, i) => {
         const r = el.getBoundingClientRect();
-        const cx = r.left + r.width / 2;
-        const cy = r.top + r.height / 2;
         gsap.set(el, {
-          x: mcx - cx,
-          y: mcy - cy,
+          x: mcx - (r.left + r.width / 2),
+          y: mcy - (r.top + r.height / 2),
           scale: 0.42,
           rotate: (i - (letters.length - 1) / 2) * 9,
-          opacity: 0,
+          autoAlpha: 0,
           transformOrigin: '50% 50%',
         });
       });
+    };
 
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: stage, start: 'top 68%' },
-      });
+    tuck();
 
-      tl.set(letters, { opacity: 1 })
+    let played = false;
+    const play = () => {
+      if (played) return;
+      played = true;
+      tuck(); // recompute against current layout before flying out
+
+      const tl = gsap.timeline();
+      tl.set(letters, { autoAlpha: 1 })
         .from(
           envelope,
           { y: 40, autoAlpha: 0, duration: 0.5, ease: 'power2.out' },
           0,
         )
-        .to(
-          flap,
-          { rotateX: -178, duration: 0.55, ease: 'power2.inOut' },
-          0.15,
-        )
+        .to(flap, { rotateX: -178, duration: 0.55, ease: 'power2.inOut' }, 0.15)
         .to(
           letters,
           {
@@ -75,9 +72,30 @@ export default function EssayEnvelope({ posts }: { posts: PostSummary[] }) {
           },
           '-=0.1',
         );
-    },
-    { scope: ref },
-  );
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            play();
+            io.disconnect();
+            break;
+          }
+        }
+      },
+      { threshold: 0, rootMargin: '0px 0px -20% 0px' },
+    );
+    io.observe(stage);
+
+    // Safety net in case the observer never fires.
+    const fallback = window.setTimeout(play, 3000);
+
+    return () => {
+      io.disconnect();
+      window.clearTimeout(fallback);
+    };
+  }, []);
 
   return (
     <div ref={ref} className="relative pb-56" style={{ perspective: '1200px' }}>

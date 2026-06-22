@@ -1,13 +1,9 @@
 'use client';
 
-import { useRef } from 'react';
-import { useGSAP } from '@gsap/react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Reveal from './Reveal';
 import { projects, type Project } from '../lib/data';
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 function ProjectMedia({ project, index }: { project: Project; index: number }) {
   return (
@@ -76,59 +72,84 @@ function ProjectBody({ project }: { project: Project }) {
 export default function Work() {
   const root = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
-      const stage = root.current;
-      if (!stage) return;
+  useEffect(() => {
+    const stage = root.current;
+    if (!stage) return;
 
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const cards = gsap.utils.toArray<HTMLElement>('[data-proj]', stage);
+    const cards = Array.from(
+      stage.querySelectorAll<HTMLElement>('[data-proj]'),
+    );
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      if (reduce) {
-        gsap.set(cards, { autoAlpha: 1 });
-        return;
-      }
+    if (reduce) {
+      gsap.set(cards, { autoAlpha: 1 });
+      return;
+    }
 
-      cards.forEach((card) => {
-        const media = card.querySelector<HTMLElement>('[data-proj-media]');
-        const img = card.querySelector<HTMLElement>('img');
-
-        // Counter the `opacity-0` class so the `from` tween ends fully visible.
-        gsap.set(card, { autoAlpha: 1 });
-
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: card, start: 'top 84%' },
-        });
-
-        tl.from(card, {
-          autoAlpha: 0,
-          y: 72,
-          rotateX: 12,
-          transformPerspective: 1000,
-          transformOrigin: '50% 100%',
-          duration: 0.9,
-          ease: 'power3.out',
-        });
-
-        if (media) {
-          tl.from(
-            media,
-            {
-              clipPath: 'inset(0% 0% 100% 0%)',
-              duration: 0.9,
-              ease: 'power3.inOut',
-            },
-            '<',
-          );
-        }
-
-        if (img) {
-          tl.from(img, { scale: 1.3, duration: 1.1, ease: 'power3.out' }, '<');
-        }
+    // Hidden start state for every card.
+    cards.forEach((card) => {
+      const media = card.querySelector<HTMLElement>('[data-proj-media]');
+      const img = card.querySelector<HTMLElement>('img');
+      gsap.set(card, {
+        autoAlpha: 0,
+        y: 72,
+        rotateX: 12,
+        transformPerspective: 1000,
+        transformOrigin: '50% 100%',
       });
-    },
-    { scope: root },
-  );
+      if (media) gsap.set(media, { clipPath: 'inset(0% 0% 100% 0%)' });
+      if (img) gsap.set(img, { scale: 1.3 });
+    });
+
+    const played = new WeakSet<HTMLElement>();
+    const reveal = (card: HTMLElement) => {
+      if (played.has(card)) return;
+      played.add(card);
+      const media = card.querySelector<HTMLElement>('[data-proj-media]');
+      const img = card.querySelector<HTMLElement>('img');
+
+      const tl = gsap.timeline();
+      tl.to(card, {
+        autoAlpha: 1,
+        y: 0,
+        rotateX: 0,
+        duration: 0.9,
+        ease: 'power3.out',
+      });
+      if (media) {
+        tl.to(
+          media,
+          { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, ease: 'power3.inOut' },
+          '<',
+        );
+      }
+      if (img) {
+        tl.to(img, { scale: 1, duration: 1.1, ease: 'power3.out' }, '<');
+      }
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            reveal(entry.target as HTMLElement);
+            io.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.18, rootMargin: '0px 0px -6% 0px' },
+    );
+
+    cards.forEach((card) => io.observe(card));
+
+    // Safety net in case the observer never fires.
+    const fallback = window.setTimeout(() => cards.forEach(reveal), 3000);
+
+    return () => {
+      io.disconnect();
+      window.clearTimeout(fallback);
+    };
+  }, []);
 
   return (
     <section
