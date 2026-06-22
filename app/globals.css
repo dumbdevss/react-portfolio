@@ -1,26 +1,205 @@
 @import "tailwindcss";
 
+/* Enable class-based dark mode for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light theme */
+  --background: #fbfbfa;
+  --foreground: #0c0d10;
+  --muted: #5b616e;
+  --faint: #8a909c;
+  --border: rgba(12, 13, 16, 0.09);
+  --card: #ffffff;
+  --brand: #1a35a8;
+  --brand-strong: #142a8c;
+  --brand-soft: rgba(26, 53, 168, 0.08);
+}
+
+.dark {
+  /* Dark theme */
+  --background: #08090c;
+  --foreground: #ececef;
+  --muted: #9aa0ad;
+  --faint: #6b717d;
+  --border: rgba(255, 255, 255, 0.10);
+  --card: #0e1015;
+  --brand: #3b6ef0;
+  --brand-strong: #2554d6;
+  --brand-soft: rgba(59, 110, 240, 0.14);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/*
+ * Next/font registers --font-geist-sans / --font-instrument-serif / --font-geist-mono
+ * on <body>, not :root. Re-declare the named font tokens here (on body) so that
+ * hand-written CSS using var(--font-serif) / var(--font-mono) resolves correctly.
+ */
+body {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
+
+::selection {
+  background: var(--brand);
+  color: #ffffff;
+}
+
+/* Animated theme switch via the View Transitions API.
+   The new theme is revealed with a circular clip animated from JS
+   (see components/ThemeToggle.tsx). Disable the default cross-fade. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+/* Subtle dotted background field */
+.bg-dots {
+  background-image: radial-gradient(var(--border) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Soft multi-stop brand gradient field, used behind sections */
+.gradient-mesh {
+  background:
+    radial-gradient(42% 50% at 12% 18%, var(--brand-soft), transparent 70%),
+    radial-gradient(
+      38% 48% at 88% 8%,
+      color-mix(in oklab, var(--brand) 16%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      55% 60% at 65% 95%,
+      color-mix(in oklab, var(--brand) 12%, transparent),
+      transparent 70%
+    );
+}
+
+/* Solid brand gradient tile, used for cards without a screenshot */
+.gradient-tile {
+  background: linear-gradient(
+    135deg,
+    var(--brand-strong) 0%,
+    var(--brand) 55%,
+    color-mix(in oklab, var(--brand) 55%, #000) 100%
+  );
+}
+
+/* Gradient text accent */
+.text-gradient {
+  background: linear-gradient(
+    120deg,
+    var(--foreground) 30%,
+    var(--brand) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Eyebrow / label */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+/* Hide content until GSAP reveals it (prevents flash before animation) */
+.reveal-hidden {
+  opacity: 0;
+}
+
+/* Editorial prose for blog posts */
+.prose-editorial {
+  color: var(--foreground);
+  font-size: 1.075rem;
+  line-height: 1.85;
+}
+.prose-editorial p { margin: 1.4em 0; color: var(--muted); }
+.prose-editorial h2 {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  line-height: 1.15;
+  margin: 1.8em 0 0.5em;
+  color: var(--foreground);
+}
+.prose-editorial h3 {
+  font-weight: 600;
+  font-size: 1.3rem;
+  margin: 1.6em 0 0.4em;
+  color: var(--foreground);
+}
+.prose-editorial a {
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-editorial blockquote {
+  border-left: 2px solid var(--brand);
+  padding-left: 1.25rem;
+  margin: 1.6em 0;
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  line-height: 1.4;
+  color: var(--foreground);
+}
+.prose-editorial ul, .prose-editorial ol { margin: 1.2em 0; padding-left: 1.4em; color: var(--muted); }
+.prose-editorial li { margin: 0.5em 0; }
+.prose-editorial code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--brand-soft);
+  color: var(--brand);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+.prose-editorial pre {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin: 1.6em 0;
+}
+.prose-editorial pre code { background: none; color: var(--foreground); padding: 0; }
