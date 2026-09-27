@@ -18,5 +18,6 @@ MOIL_API_KEY=cms_live_...                     # a content:read key (server-side 
 Visit `/moil-blog`. Author/publish posts in the Moil dashboard (content type `post` with `title`, `body` rich text, `excerpt`, `cover` image).
 
 ## Notes
-- The SDK is currently installed from a local tarball for the demo. For real use, publish `@moil/cms-client` to your registry (or install from a stable path) and run `npm install @moil/cms-client`.
+- The SDK version 0.1.0 is vendored in `vendor/moil-cms-client` and installed through `file:vendor/moil-cms-client`. This preserves the existing SDK without relying on a temporary `/tmp` tarball. Keep that directory in version control. Run `yarn install` from the repository root.
+- To update the SDK, replace the vendored package with a reviewed release and regenerate `yarn.lock`, or switch to a published registry version once available.
 - `export const revalidate = 60` controls how often the pages refetch from the CMS.
