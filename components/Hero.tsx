@@ -34,7 +34,15 @@ export default function Hero() {
             fill
             priority
             sizes="(max-width: 600px) 90vw, 540px"
-            className="portrait-image"
+            className="portrait-image portrait-original"
+          />
+          <Image
+            src="/portrait-cutout.png"
+            alt="Taiwo Triumphant, software engineer"
+            fill
+            priority
+            sizes="(max-width: 767px) 68vw, 500px"
+            className="portrait-image portrait-cutout"
           />
         </div>
       </div>

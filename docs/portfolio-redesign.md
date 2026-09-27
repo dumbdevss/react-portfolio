@@ -89,3 +89,11 @@ Reviewed the [full-resolution video](https://cdn.dribbble.com/userupload/4784147
 - Hero now uses a pure white background with dark text and brand-blue headings in light mode, and retains its black background in dark mode. Light mode uses a clean photographic frame instead of a dark feathered edge.
 - Redesigned the writing index around an oversized editorial masthead, featured essay, and simpler two-column article cards. Updated article typography, cover treatment, and reading width to match.
 - Production build, lint and TypeScript pass. Blog links and mobile article flow verified; no horizontal overflow in the tested mobile and desktop layouts.
+
+## Light hero portrait blend
+
+Replaced the light-mode arch with a transparent cutout at `public/portrait-cutout.png`, generated using the built-in image tool. The original photograph remains at `public/potrait.jpg` for dark mode. The light-mode cutout has no frame or background; a CSS alpha gradient fades only the lower torso into the page. Desktop scroll transforms continue to apply through the existing portrait wrapper.
+
+Image edit prompt:
+
+> Use case: background-extraction. Edit target: supplied original portrait. Remove only the black studio background to actual transparency (alpha), creating a clean professional cutout for a white website hero. Preserve the exact original person, identity, facial structure, expression, skin texture, hair, ears, body, pose, clothing, framing and original lighting. Do not redraw, beautify, stylize or relight the person. Preserve fine hair edges with no dark halo, no added white outline, no shadow and no invented elements. Original square framing and full visible torso retained. Output a transparent PNG.

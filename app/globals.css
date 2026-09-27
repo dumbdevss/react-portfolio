@@ -2674,7 +2674,7 @@ html:has(.portfolio[data-motion="off"]) {
   }
 }
 
-/* A crisp photographic frame replaces the dark fade in the light hero. */
+/* The extracted portrait blends directly into the light hero. */
 html:not(.dark) .hero::before {
   display: none;
 }
@@ -2682,12 +2682,18 @@ html:not(.dark) .hero-portrait {
   width: min(35vw, 500px);
   height: 58%;
   bottom: 11%;
-  overflow: hidden;
-  border-radius: 48% 48% 3px 3px;
-  mask-image: none;
-  background: #141416;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 68%, transparent 100%);
 }
-html:not(.dark) .portrait-image {
+.portrait-cutout {
+  display: none;
+}
+html:not(.dark) .portrait-original {
+  display: none;
+}
+html:not(.dark) .portrait-cutout {
+  display: block;
+  object-fit: contain;
+  object-position: center bottom;
   mask-image: none;
 }
 @media (max-width: 767px) {
