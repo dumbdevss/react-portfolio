@@ -41,14 +41,14 @@ Preserve real projects, external links, social URLs, contact email, local / Sani
 
 Run ESLint, TypeScript and a production build. Review desktop and mobile layout, navigation, gallery scroll and focus, theme switching, project brief, blog routes and reduced-motion fallbacks. Record outcomes after implementation.
 
-## Verification results
+## First-pass verification results
 
 - ESLint and TypeScript pass.
 - Production build passes, including the homepage, writing index, article pages, and existing Moil CMS routes.
 - Browser reviewed at 1440 × 900, 390 × 844, and 320 × 740.
 - No document-level horizontal overflow at those sizes.
 - Desktop gallery pins below the header and advances horizontally with scroll. Resizing to mobile removes the pin spacer and restores vertical cards.
-- Keyboard navigation reaches the last project and brings its full card into view. A final refinement forces the scroll-position cache to update before completing the scrub tween; the immediate-position recheck was blocked by the browser approval service.
+- Keyboard navigation reaches the last project and brings its full card into view. The immediate keyboard-position refinement was subsequently verified during the second pass.
 - Light / dark theme switching, mobile menu opening, Escape dismissal, menu navigation, project brief selection, scope slider, and priority selection were exercised.
 - The generated email URI contains the chosen type, scope and priority. No email was sent.
 - Writing index and an existing article rendered correctly after client navigation. Browser error log was empty during those checks.
@@ -56,8 +56,28 @@ Run ESLint, TypeScript and a production build. Review desktop and mobile layout,
 - Homepage content is present in server-rendered markup; animation state is applied only on the client.
 - The existing browser-target data package emits an age warning during builds; it does not prevent compilation.
 
-## Additional full-video reference — pending comparison
+## Full-video comparison and second edition
 
-The user supplied [this full video](https://cdn.dribbble.com/userupload/47841476/file/09bfe5c4946c210a2e59d0b0ab64b558.mp4) after implementation and initial browser testing. It has not yet been inspected. Browser automatic approval review reported that the workspace was out of credits and blocked further browser interaction. Do not treat the earlier clip analysis as verification of this additional video.
+Reviewed the [full-resolution video](https://cdn.dribbble.com/userupload/47841476/file/09bfe5c4946c210a2e59d0b0ab64b558.mp4) after browser access was restored. It is the same approximately 49.2-second sequence at 1900 × 1424. This is an interpretation for Taiwo’s identity, not a frame-perfect reproduction.
 
-The implementation is a complete first pass based on the earlier 49-second clip. Compare the new full video before claiming complete motion parity.
+- About: four illustrated capability panels with asymmetric typography, original SVG artwork, perspective entrances and subtle pointer tilt.
+- Work: layered screenshots, oversized background lettering and opposing movement inside the pinned desktop gallery.
+- Approach: a sticky circular process dial with a drawn progress ring and scroll-linked counters for Discover, Design, Develop and Deliver. The gallery refreshes first so its added scroll distance cannot desynchronize downstream scenes.
+- Writing: three staggered editorial covers using real article content and links.
+- Contact: masked headline lines, a spring entrance for the contact circle and a magnetic hover response.
+- Footer: a full signature layout with navigation, social links, oversized individually animated TAIWO letters and a rotating TT seal. The back-to-top link returns to the homepage anchor.
+- Motion: GSAP and ScrollTrigger own the timelines and scroll choreography. React owns only the motion preference; animation changes do not trigger React renders on every frame. All contexts and pointer listeners clean up when preferences or viewport conditions change.
+- Accessibility: a visible Motion control disables pinning and animation and restores normal document flow. System reduced-motion preferences are also respected. All content is readable without animation.
+
+## Second-edition verification
+
+- Desktop, 390 px and 320 px layouts reviewed; no document-level horizontal overflow.
+- Changing to mobile removes the desktop pin and displays all projects vertically.
+- Immediate keyboard focus brings the final gallery card fully into the viewport.
+- Motion control removes the pin and leaves reveal content visible; enabling it restores the gallery.
+- Process counters follow the visible steps after correcting the pin refresh order.
+- Light and dark themes and homepage return links checked.
+- System reduced motion is implemented and reviewed in code; the visible reduced-motion control was exercised, without changing the host OS preference.
+- Updated footer reviewed at 1440 × 900, 390 × 844 and 320 × 740; signature, seal and links remain inside the viewport. Its return link reaches scroll position zero.
+- Process progress ring visually verified while partway through step two.
+- Final browser error/warning log is empty. ESLint, TypeScript, whitespace checks and production build pass.

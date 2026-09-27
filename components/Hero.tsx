@@ -23,14 +23,24 @@ export default function Hero() {
         </span>
       </h1>
       <div className="hero-portrait" data-hero-portrait>
-        <Image
-          src="/potrait.jpg"
-          alt="Taiwo Triumphant, software engineer"
-          fill
-          priority
-          sizes="(max-width: 600px) 90vw, 540px"
-          className="portrait-image"
-        />
+        <div
+          className="hero-portrait-inner"
+          style={{ position: "absolute", inset: 0 }}
+          data-hero-depth
+        >
+          <Image
+            src="/potrait.jpg"
+            alt="Taiwo Triumphant, software engineer"
+            fill
+            priority
+            sizes="(max-width: 600px) 90vw, 540px"
+            className="portrait-image"
+          />
+        </div>
+      </div>
+      <div className="hero-orbit" aria-hidden="true" data-hero-orbit>
+        <span>DESIGN MINDED · ENGINEERING DRIVEN</span>
+        <i />
       </div>
       <div className="hero-side hero-side-left" data-hero-detail>
         <span className="micro-label">A little craft. A lot of intent.</span>

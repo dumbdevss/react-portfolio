@@ -32,6 +32,13 @@ export default function Work() {
                 data-featured
               >
                 <div className="project-visual">
+                  <span
+                    className="project-backdrop"
+                    aria-hidden="true"
+                    data-project-backdrop
+                  >
+                    {["CONNECT", "PROTECT", "EXPLAIN"][i]}
+                  </span>
                   <div className="project-visual-top">
                     <span>
                       0{i + 1} / {project.category}
@@ -41,7 +48,7 @@ export default function Work() {
                     </span>
                   </div>
                   {i < 2 ? (
-                    <div className="project-browser">
+                    <div className="project-browser" data-project-depth>
                       <div className="browser-chrome" aria-hidden>
                         <i />
                         <i />
@@ -58,7 +65,7 @@ export default function Work() {
                       </div>
                     </div>
                   ) : (
-                    <div className="movement-cover">
+                    <div className="movement-cover" data-project-depth>
                       <span className="movement-symbol" aria-hidden>
                         Ｍ
                       </span>

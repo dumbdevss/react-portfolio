@@ -16,15 +16,19 @@ export default function Contact() {
             OPEN TO CONVERSATIONS
           </span>
         </div>
-        <div className="contact-heading" data-reveal>
+        <div className="contact-heading">
           <h2 id="contact-title">
-            Have a good
-            <br />
-            <em>feeling about this?</em>
+            <span className="line-mask">
+              <span data-contact-line>Have a good</span>
+            </span>
+            <span className="line-mask">
+              <em data-contact-line>feeling about this?</em>
+            </span>
           </h2>
           <a
             href={"mailto:" + profile.email}
             className="contact-orbit"
+            data-magnetic
             aria-label="Email Taiwo"
           >
             <span aria-hidden>↗</span>

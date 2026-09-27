@@ -34,7 +34,7 @@ export default function Navigation() {
       </a>
       <nav className="site-nav" aria-label="Main navigation">
         <Link
-          href="/"
+          href="/#main"
           className="wordmark"
           aria-label="Taiwo Triumphant — home"
           onClick={() => setOpen(false)}
