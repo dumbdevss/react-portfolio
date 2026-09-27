@@ -81,3 +81,11 @@ Reviewed the [full-resolution video](https://cdn.dribbble.com/userupload/4784147
 - Updated footer reviewed at 1440 × 900, 390 × 844 and 320 × 740; signature, seal and links remain inside the viewport. Its return link reaches scroll position zero.
 - Process progress ring visually verified while partway through step two.
 - Final browser error/warning log is empty. ESLint, TypeScript, whitespace checks and production build pass.
+
+## Screenshot feedback refinement
+
+- Removed the large footer name, TT seal, and small footer wordmark; retained the footer links and copyright.
+- Aligned the selected-work caption and arrow horizontally, including on mobile.
+- Hero now uses a pure white background with dark text and brand-blue headings in light mode, and retains its black background in dark mode. Light mode uses a clean photographic frame instead of a dark feathered edge.
+- Redesigned the writing index around an oversized editorial masthead, featured essay, and simpler two-column article cards. Updated article typography, cover treatment, and reading width to match.
+- Production build, lint and TypeScript pass. Blog links and mobile article flow verified; no horizontal overflow in the tested mobile and desktop layouts.

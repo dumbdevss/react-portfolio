@@ -206,29 +206,6 @@ export function createPortfolioMotion(root: HTMLElement) {
         once: true,
       },
     });
-    gsap.from(all("[data-footer-letter]"), {
-      yPercent: 110,
-      rotation: 8,
-      stagger: 0.08,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: root.querySelector(".site-footer"),
-        start: "top bottom",
-        end: "bottom bottom",
-        scrub: 0.6,
-      },
-    });
-    gsap.from(root.querySelector("[data-footer-seal]"), {
-      rotation: -55,
-      scale: 0.8,
-      ease: "none",
-      scrollTrigger: {
-        trigger: root.querySelector(".site-footer"),
-        start: "top bottom",
-        end: "bottom bottom",
-        scrub: 0.6,
-      },
-    });
   });
 
   mm.add(

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Logo from "./Logo";
 import { profile } from "../lib/data";
 
 export default function Footer() {
@@ -7,16 +6,7 @@ export default function Footer() {
     <footer className="site-footer section-shell" aria-label="Site footer">
       <div className="footer-top">
         <div className="footer-intro">
-          <Link
-            href="/#main"
-            className="wordmark"
-            aria-label="Taiwo Triumphant — home"
-          >
-            <Logo />
-            <span>
-              taiwo<span className="wordmark-dot">.</span>
-            </span>
-          </Link>
+          <span className="footer-label">THANKS FOR STOPPING BY</span>
           <p>
             Thoughtful code.
             <br />
@@ -53,20 +43,6 @@ export default function Footer() {
               {social.name} <span aria-hidden>↗</span>
             </a>
           ))}
-        </div>
-      </div>
-      <div className="footer-signature" aria-hidden="true">
-        <div className="footer-name">
-          {"TAIWO".split("").map((letter, index) => (
-            <span data-footer-letter key={index}>
-              {letter}
-            </span>
-          ))}
-        </div>
-        <div className="footer-seal" data-footer-seal>
-          <span>CRAFTED WITH INTENT</span>
-          <Logo />
-          <span>TAIWO TRIUMPHANT</span>
         </div>
       </div>
       <div className="footer-bottom">

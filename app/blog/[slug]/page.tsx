@@ -1,12 +1,12 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import Navigation from '../../../components/Navigation';
-import Footer from '../../../components/Footer';
-import PortableTextBody from '../../../components/PortableTextBody';
-import { getPost, getPostSlugs } from '../../../lib/posts';
-import { urlForImage } from '../../../sanity/lib/image';
-import { formatDate } from '../../../lib/format';
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import Navigation from "../../../components/Navigation";
+import Footer from "../../../components/Footer";
+import PortableTextBody from "../../../components/PortableTextBody";
+import { getPost, getPostSlugs } from "../../../lib/posts";
+import { urlForImage } from "../../../sanity/lib/image";
+import { formatDate } from "../../../lib/format";
 
 export const revalidate = 60;
 
@@ -22,7 +22,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPost(slug);
-  if (!post) return { title: 'Post not found' };
+  if (!post) return { title: "Post not found" };
   return {
     title: `${post.title} — Taiwo`,
     description: post.excerpt,
@@ -40,17 +40,28 @@ export default async function PostPage({
   if (!post) notFound();
 
   const cover =
-    post.coverImage ?? urlForImage(post.mainImage)?.width(1600).height(900).url() ?? null;
+    post.coverImage ??
+    urlForImage(post.mainImage)?.width(1600).height(900).url() ??
+    null;
 
   return (
     <>
       <Navigation />
-      <main id="main" className="mx-auto max-w-3xl px-6 pb-28 pt-36 md:pt-44">
+      <main id="main" className="article-page section-shell mx-auto pb-28">
         <Link
           href="/blog"
           className="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-brand"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
           All writing
@@ -91,13 +102,13 @@ export default async function PostPage({
           </div>
 
           {cover && (
-            <div className="mt-12 overflow-hidden rounded-2xl border border-border">
+            <div className="article-cover mt-12 overflow-hidden border border-border">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={cover} alt={post.title} className="h-auto w-full" />
             </div>
           )}
 
-          <div className="mt-12">
+          <div className="article-body">
             <PortableTextBody value={post.body} />
           </div>
         </article>

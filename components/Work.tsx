@@ -17,7 +17,10 @@ export default function Work() {
             </h2>
           </div>
           <span className="gallery-hint">
-            A FEW THINGS I’VE PUT INTO THE WORLD <span aria-hidden>↘</span>
+            <span>A FEW THINGS I’VE PUT INTO THE WORLD</span>
+            <span className="gallery-hint-arrow" aria-hidden>
+              ↘
+            </span>
           </span>
         </div>
         <div className="gallery-window">
