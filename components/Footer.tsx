@@ -1,33 +1,44 @@
-import Link from 'next/link';
-import { profile } from '../lib/data';
+import Link from "next/link";
+import Logo from "./Logo";
+import { profile } from "../lib/data";
 
 export default function Footer() {
-  const year = new Date().getFullYear();
-
   return (
-    <footer className="border-t border-border py-12">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-6 sm:flex-row">
-        <Link href="/" className="font-serif text-xl tracking-tight text-foreground">
-          Taiwo<span className="text-brand">.</span>
+    <footer className="site-footer section-shell">
+      <div className="footer-top">
+        <Link
+          href="/"
+          className="wordmark"
+          aria-label="Taiwo Triumphant — home"
+        >
+          <Logo />
+          <span>
+            taiwo<span className="wordmark-dot">.</span>
+          </span>
         </Link>
-
-        <div className="flex items-center gap-6">
+        <div className="footer-socials">
           {profile.socials.map((social) => (
             <a
-              key={social.name}
               href={social.href}
+              key={social.name}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-muted transition-colors hover:text-brand"
             >
-              {social.name}
+              {social.name} ↗
             </a>
           ))}
         </div>
-
-        <p className="font-mono text-xs text-faint">
-          © {year} Taiwo · Built with Next.js & GSAP
-        </p>
+        <a href="#main" className="back-top">
+          Back to top ↑
+        </a>
+      </div>
+      <div className="footer-name" aria-hidden>
+        TAIWO<span>✳</span>
+      </div>
+      <div className="footer-bottom">
+        <span>© {new Date().getFullYear()} TAIWO TRIUMPHANT</span>
+        <span>BUILT WITH INTENT. ALWAYS.</span>
+        <span>THANKS FOR SCROLLING ↗</span>
       </div>
     </footer>
   );

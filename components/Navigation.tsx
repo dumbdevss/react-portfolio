@@ -1,73 +1,91 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import ThemeToggle from './ThemeToggle';
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import ThemeToggle from "./ThemeToggle";
+import Logo from "./Logo";
 
 const links = [
-  { label: 'Work', href: '/#work' },
-  { label: 'About', href: '/#about' },
-  { label: 'Writing', href: '/blog' },
-  { label: 'Contact', href: '/#contact' },
+  { label: "About", href: "/#about" },
+  { label: "Work", href: "/#work" },
+  { label: "Approach", href: "/#approach" },
+  { label: "Writing", href: "/blog" },
 ];
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        menuButton.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/70 backdrop-blur-xl">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <header className="site-header">
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
+      <nav className="site-nav" aria-label="Main navigation">
         <Link
           href="/"
-          className="font-serif text-2xl leading-none tracking-tight text-foreground"
+          className="wordmark"
+          aria-label="Taiwo Triumphant — home"
+          onClick={() => setOpen(false)}
         >
-          Taiwo<span className="text-brand">.</span>
+          <Logo />
+          <span>
+            taiwo<span className="wordmark-dot">.</span>
+            <small>TRIUMPHANT</small>
+          </span>
         </Link>
-
-        <div className="hidden items-center gap-8 md:flex">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm text-muted transition-colors hover:text-foreground"
-            >
+        <div className="desktop-links">
+          {links.map((link, i) => (
+            <Link key={link.href} href={link.href} className="nav-link">
+              <sup>0{i + 1}</sup>
               {link.label}
             </Link>
           ))}
-          <ThemeToggle />
         </div>
-
-        <div className="flex items-center gap-3 md:hidden">
+        <div className="nav-actions">
           <ThemeToggle />
+          <Link href="/#contact" className="nav-contact">
+            Let&apos;s talk <span aria-hidden>↗</span>
+          </Link>
           <button
+            ref={menuButton}
             type="button"
-            aria-label="Toggle menu"
-            onClick={() => setOpen((v) => !v)}
-            className="grid h-9 w-9 place-items-center rounded-full border border-border text-foreground"
+            className="menu-toggle"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="mobile-navigation"
+            onClick={() => setOpen(!open)}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
-            </svg>
+            <span aria-hidden>{open ? "−" : "+"}</span>
           </button>
         </div>
       </nav>
-
-      {open && (
-        <div className="border-t border-border bg-background/95 px-6 py-4 md:hidden">
-          <div className="flex flex-col gap-4">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="text-sm text-muted transition-colors hover:text-foreground"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
+      <div id="mobile-navigation" className="mobile-navigation" hidden={!open}>
+        {[...links, { label: "Let’s talk", href: "/#contact" }].map(
+          (link, i) => (
+            <Link
+              href={link.href}
+              key={link.href}
+              onClick={() => setOpen(false)}
+            >
+              <span>0{i + 1}</span>
+              {link.label}
+              <span aria-hidden>↗</span>
+            </Link>
+          ),
+        )}
+      </div>
     </header>
   );
 }

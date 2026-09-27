@@ -45,7 +45,7 @@ export default async function PostPage({
   return (
     <>
       <Navigation />
-      <main className="mx-auto max-w-3xl px-6 pb-28 pt-36 md:pt-44">
+      <main id="main" className="mx-auto max-w-3xl px-6 pb-28 pt-36 md:pt-44">
         <Link
           href="/blog"
           className="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-brand"

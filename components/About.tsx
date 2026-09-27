@@ -1,51 +1,61 @@
-import Reveal from './Reveal';
-import { profile, capabilities } from '../lib/data';
+import { capabilities, profile, projects } from "../lib/data";
 
 export default function About() {
   return (
-    <section id="about" className="border-t border-border py-28 md:py-36">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="grid gap-16 lg:grid-cols-[0.8fr_1.2fr]">
-          <Reveal>
-            <span className="eyebrow">01 — About</span>
-            <h2 className="mt-5 font-serif text-4xl leading-tight tracking-tight text-foreground md:text-5xl">
-              A generalist who sweats the details.
-            </h2>
-          </Reveal>
-
-          <Reveal y={32} className="space-y-6 text-lg leading-relaxed text-muted">
-            {profile.bio.map((para) => (
-              <p key={para}>{para}</p>
-            ))}
-          </Reveal>
+    <section
+      id="about"
+      className="section-shell about-section"
+      aria-labelledby="about-title"
+    >
+      <div className="section-kicker">
+        <span>(01 — THE PERSON BEHIND THE PIXELS)</span>
+        <span>IDEA → INTERFACE → IMPACT</span>
+      </div>
+      <div className="about-intro">
+        <h2 id="about-title" className="display-heading" data-reveal>
+          A generalist.
+          <br />A <em>detail person.</em>
+        </h2>
+        <div className="about-copy" data-reveal>
+          <span className="micro-label">HEY, I’M TAIWO.</span>
+          <p>{profile.bio[0]}</p>
+          <a href="#approach" className="text-link">
+            How I work <span aria-hidden>↘</span>
+          </a>
         </div>
-
-        <Reveal
-          stagger={0.12}
-          className="mt-20 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3"
-        >
-          {capabilities.map((cap) => (
-            <div
-              key={cap.title}
-              className="group bg-background p-8 transition-colors hover:bg-card"
-            >
-              <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-brand" />
-                <h3 className="text-lg font-medium text-foreground">{cap.title}</h3>
-              </div>
-              <p className="mt-4 text-sm leading-relaxed text-muted">
-                {cap.description}
-              </p>
-              <ul className="mt-6 flex flex-wrap gap-x-3 gap-y-1">
-                {cap.stack.map((tech) => (
-                  <li key={tech} className="font-mono text-xs text-faint">
-                    {tech}
-                  </li>
-                ))}
-              </ul>
+      </div>
+      <div className="capability-grid">
+        {capabilities.map((capability, i) => (
+          <article
+            className="capability-card"
+            data-capability
+            key={capability.title}
+          >
+            <div className="card-top">
+              <span className="micro-label">0{i + 1} / WHAT I DO</span>
+              <span className="capability-symbol" aria-hidden>
+                {["⌘", "↗", "◇"][i]}
+              </span>
             </div>
-          ))}
-        </Reveal>
+            <h3>{capability.title}</h3>
+            <p>{capability.description}</p>
+            <ul className="tech-tags">
+              {capability.stack.map((tech) => (
+                <li key={tech}>{tech}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+      <div className="about-strip" data-reveal>
+        <span>
+          <strong>{String(projects.length).padStart(2, "0")}</strong> selected
+          projects
+        </span>
+        <span>From data model to pixel.</span>
+        <span>
+          Human first. Engineer always. <span aria-hidden>↗</span>
+        </span>
       </div>
     </section>
   );

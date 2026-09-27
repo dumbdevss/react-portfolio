@@ -18,7 +18,7 @@ export default async function BlogPage() {
   return (
     <>
       <Navigation />
-      <main className="mx-auto max-w-6xl px-6 pb-28 pt-36 md:pt-44">
+      <main id="main" className="mx-auto max-w-6xl px-6 pb-28 pt-36 md:pt-44">
         <Reveal>
           <span className="eyebrow">Writing</span>
           <h1 className="mt-5 max-w-2xl font-serif text-5xl leading-[1.02] tracking-tight text-foreground md:text-7xl">
